@@ -17,4 +17,3 @@ def SSCDecodeFrame(frame: bytes):
     }
 
     print(payload)
-    print(frame)

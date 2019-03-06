@@ -14,7 +14,6 @@ class SSCServer(TCPServer):
             try:
                 data = await stream.read_bytes(12)
                 loop.run_in_executor(None,functools.partial(SSCDecoder.SSCDecodeFrame,data))
-                print("echo>")
                 await stream.write(data)
                 
             except StreamClosedError:
