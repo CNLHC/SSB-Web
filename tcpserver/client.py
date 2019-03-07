@@ -6,7 +6,7 @@ from tornado.ioloop import IOLoop
 from tornado.iostream import StreamClosedError
 from tornado import gen
 import binascii
-import tcpserver.SSCDecoder
+import SSCEncoder
 import random
 import queue
 import prettytable
@@ -44,6 +44,9 @@ async def client(loop:IOLoop):
                     good=goodsList[int(command[1])]
                     RFID = bytes.fromhex(good[0])
                     msg =SSCEncoder.SSCFrameEncoder(RFID,CartID,op,opData)
+                    await  stream.write(msg)
+                elif act=='d':
+                    msg = command[1].encode()
                     await  stream.write(msg)
 
         def waitKey():
