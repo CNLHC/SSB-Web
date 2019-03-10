@@ -5,10 +5,20 @@ from django.shortcuts import get_object_or_404
 from .serializers import SessionSerializer
 from CommodityManage.models import  Commodity,RFIDTag
 from ShoppingSession.models import  ShoppingSession,SessionItems
+from django_filters.rest_framework import DjangoFilterBackend
 
 class SessionViewset(viewsets.ModelViewSet):
     serializer_class = SessionSerializer
     queryset = ShoppingSession.objects.all()
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('State','ShoppingCart')
+
+    def create(self, request, *args, **kwargs):
+        data = request.data.dict()
+        if ShoppingSession.objects.filter(ShoppingCart__id=data.get('ShoppingCart')).filter(State__exact=ShoppingSession.SESSION_SHOPPING).count()>0:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        return super(SessionViewset,self).create( request, *args, **kwargs)
+
 
     @action(methods=['post'],detail=True)
     def add(self,request,pk):
