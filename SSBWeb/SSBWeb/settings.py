@@ -25,7 +25,7 @@ SECRET_KEY = 'v$0%)!@1rt!_q(6l9le$zz3@tbr-*-v9q+oi0^8co!d1uku@(+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ssb.cnworkshop.xyz']
 
 
 # Application definition
