@@ -3,8 +3,8 @@ from django.db import models
 # Create your models here.
 
 class RFIDTag(models.Model):
-    ID = models.CharField(max_length=15)
-    Commodity = models.ForeignKey(Commodity,on_delete=models.CASCADE,related_name="RFID")
+    RFID=models.CharField(max_length=64,unique=True)
+    CommodityItem = models.ForeignKey('CommodityManage.Commodity',on_delete=models.CASCADE,related_name='RFID')
 
 class Commodity(models.Model):
     Name = models.CharField(max_length=100)
