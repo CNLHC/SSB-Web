@@ -16,10 +16,10 @@ def SSCDecodeFrame(frame: bytes):
         raise CRCError
 
     payload = {
-        'RFID':(frame[0:4]),
-        'CartID':(frame[4:7]),
-        'op':(frame[7:8]),
-        'opData':(frame[8:11])
+        'RFID':(frame[0:8]),
+        'CartID':(frame[8:14]),
+        'op':(frame[14:16]),
+        'opData':(frame[16:22])
     }
 
     print(payload)
