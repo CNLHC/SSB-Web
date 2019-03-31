@@ -1,20 +1,18 @@
 import crc8
+import crcmod
 import binascii
+import crccheck
 
 
 class CRCError(Exception):
     pass
 
 def SSCDecodeFrame(frame: bytes):
-    hash = crc8.crc8()
-
-
-    hash.update(frame[0:11])
-
+    Checksum=(crccheck.crc.Crc8Maxim.calc(frame[0:22]))
     print("Check Frame",(frame))
 
-    if(hash.digest() != frame[-1:]):
-        print("CRC Check Error!",(hash.digest()),(frame[-1:]))
+    if( Checksum != int(frame[-2:],16) ):
+        print("CRC Check Error!",(Checksum),(frame[-2:]))
         raise CRCError
 
     payload = {
