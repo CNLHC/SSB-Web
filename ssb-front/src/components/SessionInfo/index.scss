@@ -1,0 +1,25 @@
+.ssb-session-info{
+  .info-list{
+    list-style-type: none;
+    padding-left: 0;
+    list-style-position: inside;
+
+  }
+  .session-summary{
+    text-align: right;
+
+    .money-span{
+      color: #ad2102;
+    }
+    .money-span::before{
+      content: "￥";
+    }
+  }
+  .action-bar{
+    margin-top: 10px;
+
+  }
+
+
+
+}

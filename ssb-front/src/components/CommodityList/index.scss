@@ -1,0 +1,48 @@
+
+.ssb-commodity-card:hover{
+  -webkit-box-shadow: 4px 4px 8px 3px rgba(168,165,168,1);
+  -moz-box-shadow: 4px 4px 8px 3px rgba(168,165,168,1);
+  box-shadow: 4px 4px 8px 3px rgba(168,165,168,1);
+}
+.ssb-commodity-card{
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+
+  .thumbnail-box{
+    width: 30%;
+    height: auto;
+    img{
+      width: auto;
+      height: 20vh;
+    }
+  }
+  .info-box{
+    width: 70%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-between;
+    .number-info-box{
+      display: flex;
+      justify-content: space-between;
+      padding: 0 10px;
+      .commodity-price::before{
+        content: "￥ ";
+      }
+      .commodity-price{
+        color: #ad2102;
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+      }
+      .commodity-number::before{
+        content: "x";
+      }
+      .commodity-number{
+        color:#bfbfbf
+      }
+    }
+  }
+}
