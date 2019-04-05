@@ -8,11 +8,14 @@ class CartSerializer(serializers.ModelSerializer):
         fields= '__all__'
 
 class SessionItemSerializer(serializers.ModelSerializer):
-    Commodity=CommoditySerializer(many=True,read_only=True )
+    ItemDetail =  serializers.SerializerMethodField()
+
+    def get_ItemDetail(self,obj:SessionItems):
+        return CommoditySerializer(obj.Item).data
 
     class Meta:
         model =  SessionItems
-        fields= '__all__'
+        fields= ('__all__')
 
 class SessionSerializer(serializers.ModelSerializer):
     Items=SessionItemSerializer(many=True,read_only=True)

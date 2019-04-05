@@ -13,8 +13,15 @@ class SessionViewset(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('State','ShoppingCart')
 
+
+    def retrieve(self, request, *args, **kwargs):
+        print(args,kwargs)
+        SessionObj = get_object_or_404(ShoppingSession,pk=kwargs.get('pk'))  #type: ShoppingSession
+        return Response(data  = SessionSerializer(SessionObj).data)
+
     def create(self, request, *args, **kwargs):
-        data = request.data.dict()
+        data = request.data
+        print(data,args,kwargs)
         if ShoppingSession.objects.filter(ShoppingCart__id=data.get('ShoppingCart')).filter(State__exact=ShoppingSession.SESSION_SHOPPING).count()>0:
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         return super(SessionViewset,self).create( request, *args, **kwargs)
