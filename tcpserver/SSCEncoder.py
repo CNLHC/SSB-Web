@@ -1,4 +1,6 @@
 import crc8
+import binascii
+binascii
 
 def SSCFrameEncoder(RFID: bytes, CartID: bytes,op: bytes=bytes([0]), opData: bytes=bytes([0, 0, 0, 0])):
     hash = crc8.crc8()

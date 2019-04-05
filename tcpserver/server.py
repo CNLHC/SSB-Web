@@ -30,8 +30,9 @@ class SSCServer(TCPServer):
             try:
                 if not stream.reading():
                     dataFuture = stream.read_bytes(12,partial=True) #type:futures.Future
-                frameBuffer=frameBuffer + await gen.with_timeout(timedelta(seconds=3),dataFuture) 
-                if len(frameBuffer)<12:
+                frameBuffer=frameBuffer + await gen.with_timeout(timedelta(seconds=12),dataFuture) 
+                print("CurrentBuffer:",frameBuffer)
+                if len(frameBuffer)<24:
                     continue
                 loop.run_in_executor(None,partial(self.wrappedDecode,frameBuffer,Q))
 
@@ -54,6 +55,7 @@ class SSCServer(TCPServer):
 loop = IOLoop.current()#type: IOLoop
 loop.set_default_executor(futures.ThreadPoolExecutor(max_workers=10))
 server=SSCServer()
-server.listen('8888')
+print("server listening at 2334")
+server.listen('2334')
 loop.start()
 

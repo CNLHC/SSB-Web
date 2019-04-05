@@ -44,6 +44,7 @@ async def client(loop:IOLoop):
                     good=goodsList[int(command[1])]
                     RFID = bytes.fromhex(good[0])
                     msg =SSCEncoder.SSCFrameEncoder(RFID,CartID,op,opData)
+                    print("sengMessage:",binascii.b2a_hex(msg))
                     await  stream.write(msg)
                 elif act=='d':
                     msg = command[1].encode()
