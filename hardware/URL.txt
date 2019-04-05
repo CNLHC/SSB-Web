@@ -1,0 +1,2 @@
+http://dan.drown.org/stm32duino/package_STM32duino_index.json
+file:\\C:\Program Files (x86)\Arduino\hardware\package_stm_index.json
