@@ -1,0 +1,8 @@
+digraph G {
+    a[label="First CR/LF"]
+    b[label="response"]
+    c[label="End CR/LF"]
+
+    a->b->c
+
+}
