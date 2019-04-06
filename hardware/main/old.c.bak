@@ -291,32 +291,31 @@ void setup() {
   pinMode(PB8, INPUT_PULLUP);
 
 ////////////////BC26 Initializaion///////////////
-  Serial1.begin(115200, SERIAL_8N1);
-  Serial1.println("Start!");
-  Serial3.begin(115200);
-  delay(5000);  //Waiting for SIM Card Registration
+  // Serial1.begin(115200, SERIAL_8N1);
+  // Serial1.println("Start!");
+  // Serial3.begin(115200);
+  // delay(5000);  //Waiting for SIM Card Registration
 
-  Serial3.println("AT\r\n");  //Auto Baud Rate Synchronization
-  while (Serial3.available()) {
-    char ch;
-    ch = Serial3.read();
-    Serial1.print(ch);
-  } //Get response: AT OK
+  // Serial3.println("AT\r\n");  //Auto Baud Rate Synchronization
+  // while (Serial3.available()) {
+  //   char ch;
+  //   ch = Serial3.read();
+  //   Serial1.print(ch);
+  // } //Get response: AT OK
 
-  while (!Serial3.available()); //Wait for Response
+  // while (!Serial3.available()); //Wait for Response
 
-  Serial1.println("Baud Rate Synchronized!");
-  delay(1000);
+  // Serial1.println("Baud Rate Synchronized!");
+  // delay(1000);
 
-  Serial3.println("ATE0\r\n");  //Echo Disabled
-  while (Serial3.available()) {
-    char ch;
-    ch = Serial3.read();
-    Serial1.println(ch);
-  } //Get response: OK
-
-  Serial1.println("Echo Disabled!\r\n");
-  delay(500);
+  // Serial3.println("ATE0\r\n");  //Echo Disabled
+  // while (Serial3.available()) {
+  //   char ch;
+  //   ch = Serial3.read();
+  //   Serial1.println(ch);
+  // } //Get response: OK
+  // Serial1.println("Echo Disabled!\r\n");
+  // delay(500);
 
   while (!netConnected) //Connecting with IoT Network
   {

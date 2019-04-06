@@ -12,7 +12,9 @@ void setup()
 {
   hardwareinit();
   Serial1.println("hello");
-  gBC26Obj->deferCommand("AT\r\n");
+  gBC26Obj->deferCommand("AT+CGACT?\r\n");
+  // gBC26Obj->deferCommand("ATE0\r\n");
+
   portBASE_TYPE s1, s2, hSerialReader;
   blinkLEDSem = xSemaphoreCreateCounting(1, 0);
   s1 = xTaskCreate(ThLEDSemGiver, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
