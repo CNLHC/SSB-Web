@@ -49,16 +49,19 @@ static void  ThBC26SocketDaemon(void * args){
                             if(p[5]=='1'){
                                 innerFSM=0;
                                 vTaskDelay(500);
+                                gBC26Obj->mIsSocketConnect=false;
                             }
                             else if (p[5]=='2'){
-                                innerFSM=0;
-                                vTaskDelay(5000);
+                                innerFSM=7;
+                                gBC26Obj->mIsSocketConnect=true;
                             }
                             else if (p[5]=='3'){
                                 innerFSM=5;
+                                gBC26Obj->mIsSocketConnect=false;
                             }
                             else{
                                 innerFSM=0;
+                                gBC26Obj->mIsSocketConnect=false;
                             }
                         }
                     }
@@ -67,11 +70,12 @@ static void  ThBC26SocketDaemon(void * args){
             }
             case 3:{
                 if(!gBC26Obj->isBusy()){
-                    gBC26Obj->deferCommand("AT+QIOPEN=1,1,\"TCP\",\"39.105.151.150\",2334,3001,1,0\r\n");
+                    gBC26Obj->deferCommand("AT+QIOPEN=1,1,\"TCP\",\"39.105.151.150\",2334,3001,0,0\r\n");
                     innerFSM=4;
                 }
                 break;
             }
+
             case 4:{
                 if(gBC26Obj->mIsResponseSet){
                     Serial1.println("Scoket Daemon 4");
@@ -84,6 +88,7 @@ static void  ThBC26SocketDaemon(void * args){
                 }
                 break;
             }
+
             case 5:{
                 Serial1.println("Scoket Daemon 5(Transient)");
                 if(!gBC26Obj->isBusy()){
@@ -92,10 +97,27 @@ static void  ThBC26SocketDaemon(void * args){
                 }
                 break;
             }
+
             case 6:{
                 if(gBC26Obj->mIsResponseSet){
                     gBC26Obj->releaseLock();
                     innerFSM=0;
+                }
+                break;
+            }
+
+            case 7:{
+                if(!gBC26Obj->isBusy()){
+                    gBC26Obj->deferCommand("AT+QISWTMD=1,0\r\n");
+                    innerFSM=8;
+                }
+                break;
+            }
+            case 8:{
+                if(gBC26Obj->mIsResponseSet){
+                    gBC26Obj->releaseLock();
+                    innerFSM=0;
+                    vTaskDelay(5000);
                 }
                 break;
             }

@@ -17,7 +17,7 @@ class SSCServer(TCPServer):
         try:
             SSCDecoder.SSCDecodeFrame(frame)
             queue.put(self.DECODE_SUC)
-        except SSCDecoder.CRCError:
+        except:
             print("Frame CRC8 checksum error!")
             queue.put(self.DECODE_CRC_ERROR)
 

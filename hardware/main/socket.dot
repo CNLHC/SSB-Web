@@ -7,8 +7,15 @@ digraph G {
     f[label="5/defer QIClose"]
     g[label="6/release lock"]
 
+    i[label="7/defer QISWTMD"]
+    j[label="8/release lock"]
+
     c->c[label=" if socket connecting\n delay 200"]
-    c->a[label=" if socket connected\n delay 2000"]
+
+    c->i[label=" if socket connected\n delay 2000"]
+    i->j
+    j->a
+
     c->f[label=" if socket closing "]
     f->g[label=" any"]
     g->a[label=" any"]

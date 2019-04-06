@@ -3,15 +3,17 @@
 #include "./bc26Reader.hpp"
 #include "./bc26NetworkDaemon.hpp"
 #include "./bc26SocketDaemon.hpp"
+#include "./bc26HeartBeat.hpp"
 
 extern BC26 *gBC26Obj;
 
 static void ThBC26Init(void *arg){
-    portBASE_TYPE  hSerialReader,hNetworkDaemon,hSocketDaemon;
+    portBASE_TYPE  hSerialReader,hNetworkDaemon,hSocketDaemon,hHeartBeat;
     int innerFSM=0;
     hSerialReader = xTaskCreate(ThBC26Reader, NULL, configMINIMAL_STACK_SIZE, NULL, 1, NULL);
     hNetworkDaemon = xTaskCreate( ThBC26NetworkDaemon, NULL, configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-    hSocketDaemon= xTaskCreate(   ThBC26SocketDaemon, NULL, configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+    hSocketDaemon= xTaskCreate(ThBC26SocketDaemon, NULL, configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+    hHeartBeat =  xTaskCreate(ThBC26HeartBeat, NULL, configMINIMAL_STACK_SIZE, NULL, 1, NULL);
 
     while(1){
         switch(innerFSM){
