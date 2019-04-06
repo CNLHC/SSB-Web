@@ -13,7 +13,7 @@ def SSCDecodeFrame(frame: bytes):
 
     if( Checksum != int(frame[-2:],16) ):
         print("CRC Check Error!",(Checksum),(frame[-2:]))
-        raise CRCError
+        return 
 
     payload = {
         'RFID':(frame[0:8]),
