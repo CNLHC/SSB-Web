@@ -1,5 +1,7 @@
 
+#pragma once
 #include "../bc26util.hpp"
+#include <MapleFreeRTOS900.h>
 
 extern BC26 *gBC26Obj;
 
@@ -12,6 +14,10 @@ static void ThBC26Reader(void *arg)
   char readBuf[200];
   char ch;
   int i = 0;
+  TickType_t startCount;
+  TickType_t currentCount;
+
+
   while (1)
   {
     if (Serial3.available())
@@ -24,10 +30,18 @@ static void ThBC26Reader(void *arg)
       ch = Serial3.read();
       switch (FrameFSM){
       case 0: if (ch == 13) FrameFSM = 1; else FrameFSM = 0; break;
-      case 1: if (ch == 13) FrameFSM = 1; else if (ch == 10) FrameFSM = 2; else FrameFSM = 0; break;
+      case 1: if (ch == 13) FrameFSM = 1; else if (ch == 10) {FrameFSM = 2; startCount=xTaskGetTickCount();} else FrameFSM = 0; break;
       case 2:{
           readBuf[i++] = ch;
-          if (endFSM==4||endFSM==11||endFSM==3||endFSM==10||i>200)
+          currentCount = xTaskGetTickCount();
+          if(currentCount<startCount)
+            #ifdef configUSE_16_BIT_TICKS
+              startCount+=UINT16_MAX;
+            #else
+              startCount+=UINT32_MAX;
+            #endif
+
+          if (endFSM==4||endFSM==11||endFSM==3||endFSM==10||i>200||(currentCount-startCount)>1000)
           {
             readBuf[i] = '\0';
             gBC26Obj->setResponse(readBuf);
@@ -53,5 +67,6 @@ static void ThBC26Reader(void *arg)
         case 11:endFSM=0;
       }
     }
+    vTaskDelay(5);
   }
 }

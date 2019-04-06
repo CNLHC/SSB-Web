@@ -1,3 +1,5 @@
+
+#pragma once
 #include <MapleFreeRTOS900.h>
 
 SemaphoreHandle_t blinkLEDSem;

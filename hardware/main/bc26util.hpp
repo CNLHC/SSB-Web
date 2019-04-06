@@ -1,21 +1,25 @@
 #pragma once
 class BC26{
     public:
-        char mIsNetworkAvailable;
-        char mIsSocketConnect;
-        char mBusy;
+        bool mIsNetworkAvailable;
+        bool mIsSocketConnect;
+        bool mBusy;
+        bool mIsResponseSet;
+
         BC26*  mSingletonObj;
         BC26 * getInst();
         bool isBusy();
         void deferCommand(const char * command);
-        char *releaseLock(char *message);
+        char *releaseLock();
         void setResponse(char * message);
-        BC26():mIsNetworkAvailable(false),mIsSocketConnect(false),mBusy(false){
-            mSingletonObj = this;
+        BC26(): mIsNetworkAvailable(false),
+                mIsSocketConnect(false),
+                mBusy(false),
+                mIsResponseSet(false){
         };
-
-    private:
         char * mMessage;
+    private:
+
         //私有化构造器以实现单例
 };
 
@@ -35,6 +39,7 @@ void BC26::deferCommand(const char * command){
         Serial1.println(command);
         Serial3.println(command);
         mBusy=true;
+        mIsResponseSet = false;
     }
     else{
         Serial1.println("defer locked");
@@ -44,14 +49,15 @@ void BC26::deferCommand(const char * command){
 void BC26::setResponse(char * message){
     if(mBusy){
         Serial1.println("set Response");
-        Serial1.println(message);
+        // Serial1.println(message);
         mMessage = message;
-        mBusy=false;
+        mIsResponseSet = true;
     }
 }
 
-char * BC26::releaseLock(char *message){
+char * BC26::releaseLock(){
         mBusy=false;
+        mIsResponseSet = false;
         return mMessage;
 }
     

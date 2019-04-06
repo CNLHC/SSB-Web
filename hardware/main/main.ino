@@ -2,24 +2,23 @@
 #include "./hardwareInit.hpp"
 #include "./bc26util.hpp"
 #include "./task/blinkLED.hpp"
-#include "./task/bc26Reader.hpp"
+#include "./task/bc26Init.hpp"
+
 //信号量定义
 SemaphoreHandle_t BC26ReaderTimeOut;
 //单例全局变量
 BC26 *gBC26Obj = new BC26();
 
+
 void setup()
 {
   hardwareinit();
-  Serial1.println("hello");
-  gBC26Obj->deferCommand("AT+CGACT?\r\n");
-  // gBC26Obj->deferCommand("ATE0\r\n");
 
-  portBASE_TYPE s1, s2, hSerialReader;
+  portBASE_TYPE s1, s2, hBC26Init;
   blinkLEDSem = xSemaphoreCreateCounting(1, 0);
   s1 = xTaskCreate(ThLEDSemGiver, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
   s2 = xTaskCreate(ThLEDSemReceiver, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-  hSerialReader = xTaskCreate(ThBC26Reader, NULL, configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+  hBC26Init = xTaskCreate(ThBC26Init, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
 
   if (blinkLEDSem== NULL || s1 != pdPASS || s2 != pdPASS)
   {

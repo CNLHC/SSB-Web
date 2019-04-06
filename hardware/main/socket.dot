@@ -1,0 +1,22 @@
+digraph G {
+    a[label="0/wait network available"]
+    b[label="1/defer QISTATE"]
+    c[label="2/release lock \n handle Response"]
+    d[label="3/defer QIOPen"]
+    e[label="4/release lock"]
+    f[label="5/defer QIClose"]
+    g[label="6/release lock"]
+
+    c->c[label=" if socket connecting\n delay 200"]
+    c->a[label=" if socket connected\n delay 2000"]
+    c->f[label=" if socket closing "]
+    f->g[label=" any"]
+    g->a[label=" any"]
+
+
+    a->b[label="  if mIsNetworkAvailable"]
+    b->c[label=" any"]
+    c->d[label=" if no Socket"]
+    d->e[label=" any"]
+    e->a[label=" any"]
+}
