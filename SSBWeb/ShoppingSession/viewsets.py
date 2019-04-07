@@ -60,6 +60,19 @@ class SessionViewset(viewsets.ModelViewSet):
         return Response(status=status.HTTP_200_OK)
 
     @action(methods=['post'],detail=True)
+    def removeByID(self,request,pk):
+        data = request.data.dict() #type:dict
+        SessionObj = get_object_or_404(ShoppingSession,pk=pk)  #type: ShoppingSession
+        ItemID=data.get('ItemID')
+        try:
+            sessionItem = SessionObj.Items.all().get(Item=ItemID)
+            sessionItem.delete()
+        except SessionItems.DoesNotExist:
+            print("not found")
+            pass
+        return Response(status=status.HTTP_200_OK)
+
+    @action(methods=['post'],detail=True)
     def deal(self,request,pk):
         SessionObj = get_object_or_404(ShoppingSession,pk=pk)  #type: ShoppingSession
         SessionObj.State=SessionObj.SESSION_PAYING
