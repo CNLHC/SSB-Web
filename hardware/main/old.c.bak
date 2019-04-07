@@ -11,13 +11,13 @@
 
 #define SS_PIN PA4  // CS Pin
 #define RST_PIN PA3 // Reset Pin
-#define CARTID "000000"
-#define START "00000000"
-#define SEND "00000001"
-#define DELETE "00000011"
-#define END "FFFFFFFF" //COMMAND
-#define LINK "01010101"
-#define DATA "000000"
+// #define CARTID "000000"
+// #define START "00000000"
+// #define SEND "00000001"
+// #define DELETE "00000011"
+// #define END "FFFFFFFF" //COMMAND
+// #define LINK "01010101"
+// #define DATA "000000"
 // HardwareSerial Serial2(PA3,PA2);
 // HardwareSerial Serial3(PB11,PB10);
 

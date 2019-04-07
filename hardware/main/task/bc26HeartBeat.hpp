@@ -14,7 +14,6 @@ static void ThBC26HeartBeat(void *arg){
                     innerFSM=1;
                 }
                 break;
-
             }
             case 1:{
                 if(gBC26Obj->mIsResponseSet){
@@ -22,7 +21,7 @@ static void ThBC26HeartBeat(void *arg){
                     Serial1.println(gBC26Obj->mMessage);
                     gBC26Obj->releaseLock();
                     innerFSM=0;
-                    vTaskDelay(10000);
+                    vTaskDelay(20000);
                 }
                 break;
             }
