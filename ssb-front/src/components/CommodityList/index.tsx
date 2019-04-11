@@ -1,11 +1,12 @@
 import * as React from 'react';
-import {List} from 'antd'
+import {Icon, List} from 'antd'
 import {ISessionItem} from "../../Typings/TypeSessionInfo";
 import {BASE_URL} from "../../API";
 import  './index.scss'
 
 export interface ICommodityListProps {
     data?:Array<ISessionItem>
+    onClickDelete?:(itemID:number)=>void
 }
 
 export class CommodityList extends React.Component<ICommodityListProps> {
@@ -22,8 +23,11 @@ export class CommodityList extends React.Component<ICommodityListProps> {
                             </div>
                             <div className={"info-box"}>
                                 <div className={"commodity-name"}>
-
-                                    {item.ItemDetail.Name}
+                                    <div className={"commodityTitle"}>{item.ItemDetail.Name}</div>
+                                    <div className={"deleteIcon"}><Icon  type={"delete"} onClick={()=>{
+                                        if(this.props.onClickDelete!==undefined)
+                                            this.props.onClickDelete(item.ItemDetail.id);
+                                    }} /></div>
                                 </div>
                                 <div className={"number-info-box"}>
                                     <div className={"commodity-price"}>{item.ItemDetail.Price}</div>

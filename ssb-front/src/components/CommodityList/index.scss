@@ -1,11 +1,11 @@
 
 .ssb-commodity-card:hover{
-  -webkit-box-shadow: 4px 4px 8px 3px rgba(168,165,168,1);
-  -moz-box-shadow: 4px 4px 8px 3px rgba(168,165,168,1);
-  box-shadow: 4px 4px 8px 3px rgba(168,165,168,1);
+  -webkit-box-shadow: 1px 1px 5px 3px rgba(165,165,165,1);
+  -moz-box-shadow: 1px 1px 5px 3px rgba(165,165,165,1);
+  box-shadow: 1px 1px 5px 3px rgba(165,165,165,1);
 }
 .ssb-commodity-card{
-  width: 95%;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
@@ -26,6 +26,16 @@
     display: flex;
     flex-direction: column;
     justify-content:space-between;
+    .commodity-name{
+      display: flex;
+      .deleteIcon{
+        width: auto;
+      }
+      .deleteIcon:hover{
+        color:#1890ff;
+      }
+    }
+
     .number-info-box{
       display: flex;
       justify-content: space-between;
