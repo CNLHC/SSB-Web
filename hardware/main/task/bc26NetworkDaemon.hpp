@@ -33,7 +33,7 @@ static void ThBC26NetworkDaemon(void *arg){
                 else
                     gBC26Obj->mIsNetworkAvailable=false;
 
-                vTaskDelay(5000);  //check every 5s
+                vTaskDelay(15000);  //check every 5s
                 innerFSM=0;
             }
         };
