@@ -5,12 +5,14 @@ import {ISessionInfo, ISessionItem} from "../../Typings/TypeSessionInfo";
 
 export interface IPageSettleReducer {
     loadingSessionInfo:boolean
+    loadingDeleteItem:boolean
     sessionInfo?:ISessionInfo
 }
 
 
 const InitState: IPageSettleReducer = {
-    loadingSessionInfo:false
+    loadingSessionInfo:false,
+    loadingDeleteItem:false
 };
 
 
@@ -23,8 +25,17 @@ const PageSettleReducers=(state: IPageSettleReducer = InitState, action: ActionT
             draft.loadingSessionInfo = false;
             return
         case ActionsEnum.GetSessionInfo_Suc:
-            draft.loadingSessionInfo =true;
+            draft.loadingSessionInfo =false;
             draft.sessionInfo = action.data;
+            return
+        case ActionsEnum.DeleteItemByID_Req:
+            draft.loadingSessionInfo=true;
+            return
+        case ActionsEnum.DeleteItemByID_Suc:
+            draft.loadingSessionInfo=false;
+            return
+        case ActionsEnum.DeleteItemByID_Fai:
+            draft.loadingSessionInfo=false;
             return
     }
 })

@@ -61,7 +61,10 @@ class SessionViewset(viewsets.ModelViewSet):
 
     @action(methods=['post'],detail=True)
     def removeByID(self,request,pk):
-        data = request.data.dict() #type:dict
+        try:
+            data = request.data.dict() #type:dict
+        except AttributeError:
+            data = request.data
         SessionObj = get_object_or_404(ShoppingSession,pk=pk)  #type: ShoppingSession
         ItemID=data.get('ItemID')
         try:
