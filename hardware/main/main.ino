@@ -36,16 +36,15 @@ void setup()
   //   delay(10);
   // }
   
+  QueueRFID = xQueueCreate(10, sizeof(uint32_t));
 
   portBASE_TYPE s1, s2, hBC26Init,hMFRC,hSSB;
   blinkLEDSem = xSemaphoreCreateCounting(1, 0);
   s1 = xTaskCreate(ThLEDSemGiver, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
   s2 = xTaskCreate(ThLEDSemReceiver, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
   hBC26Init = xTaskCreate(ThBC26Init, NULL, configMINIMAL_STACK_SIZE, NULL, 5, NULL);
-  hMFRC =  xTaskCreate( ThMFRC522Daemon, NULL,512, NULL, 2, NULL);
+  hMFRC =  xTaskCreate( ThMFRC522Daemon, NULL,768, NULL, 5, NULL);
   hSSB =  xTaskCreate( ThSSBDaemon, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-// 
-  QueueRFID = xQueueCreate(10, sizeof(uint32_t));
 
   if (blinkLEDSem== NULL || s1 != pdPASS || s2 != pdPASS)
   {
