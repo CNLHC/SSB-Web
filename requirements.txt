@@ -2,6 +2,9 @@ astroid==2.2.4
 backcall==0.1.0
 decorator==4.3.2
 Django==2.1.7
+django-cors-headers==2.5.2
+django-filter==2.1.0
+django-filters==0.2.1
 djangorestframework==3.9.2
 ipython==7.3.0
 ipython-genutils==0.2.0

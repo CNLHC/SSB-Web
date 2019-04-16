@@ -84,6 +84,11 @@ static void  ThBC26SocketDaemon(void * args){
                         gBC26Obj->releaseLock();
                         innerFSM = 0;
                     }
+                    else if(strstr(gBC26Obj->mMessage,"ERROR")!=NULL){
+                        gBC26Obj->releaseLock();
+                        innerFSM = 0;
+
+                    }
                     vTaskDelay(1000);
                 }
                 break;
@@ -117,7 +122,7 @@ static void  ThBC26SocketDaemon(void * args){
                 if(gBC26Obj->mIsResponseSet){
                     gBC26Obj->releaseLock();
                     innerFSM=0;
-                    vTaskDelay(5000);
+                    vTaskDelay(15000);
                 }
                 break;
             }

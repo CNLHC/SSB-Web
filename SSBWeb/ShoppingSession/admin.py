@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin import AdminSite
 from  ShoppingSession.models import  ShoppingSession,SessionItems
 from django import forms
 
@@ -19,5 +20,6 @@ class ShoppingSessionAdmin(admin.ModelAdmin):
     inlines = [SessionItemsAdmin,]
 
 admin.site.site_header = '易迈无人超市后台管理'
+admin.site.site_title= '易迈无人商店后台管理'
 
 

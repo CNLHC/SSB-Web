@@ -24,15 +24,27 @@ QueueHandle_t QueueRFID = NULL;
 void setup()
 {
   hardwareinit();
+  // uint32_t RFID;
+  // while(1){
+  //   if ( gMFRC522Obj.PICC_IsNewCardPresent()) if(gMFRC522Obj.PICC_ReadCardSerial()) {
+  //     Serial1.println(F("Scanned PICC's UID:"));
+  //     for ( uint8_t i = 0; i < 4; i++)  
+  //          (RFID) |= (gMFRC522Obj.uid.uidByte[i]<<8*i)&(0xFF<<8*i);
+  //     Serial1.println(String(RFID,HEX));
+  //     gMFRC522Obj.PICC_HaltA(); // Stop reading
+  //   }
+  //   delay(10);
+  // }
+  
 
   portBASE_TYPE s1, s2, hBC26Init,hMFRC,hSSB;
   blinkLEDSem = xSemaphoreCreateCounting(1, 0);
   s1 = xTaskCreate(ThLEDSemGiver, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
   s2 = xTaskCreate(ThLEDSemReceiver, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-  hBC26Init = xTaskCreate(ThBC26Init, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-  hMFRC =  xTaskCreate( ThMFRC522Daemon, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
+  hBC26Init = xTaskCreate(ThBC26Init, NULL, configMINIMAL_STACK_SIZE, NULL, 5, NULL);
+  hMFRC =  xTaskCreate( ThMFRC522Daemon, NULL,512, NULL, 2, NULL);
   hSSB =  xTaskCreate( ThSSBDaemon, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-
+// 
   QueueRFID = xQueueCreate(10, sizeof(uint32_t));
 
   if (blinkLEDSem== NULL || s1 != pdPASS || s2 != pdPASS)
