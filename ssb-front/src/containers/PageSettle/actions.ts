@@ -8,11 +8,14 @@ export enum ActionsEnum {
     DeleteItemByID_Req="[Settle]DeleteItemByID_Req",
     DeleteItemByID_Suc="[Settle]DeleteItemByID_Suc",
     DeleteItemByID_Fai="[Settle]DeleteItemByID_Fai",
+    DealSession_Req = "[Settle]DealSession_Req",
+    DealSession_Suc = "[Settle]DealSession_Suc",
+    DealSession_Fai = "[Settle]DealSession_Fai",
 }
 
 export const ThunkGetSessionInfo = (queryInfo:any,onSuccess?:()=>any,onFail?:()=>any) => (dispatch: any) => {
     dispatch(ActGetSessionInfoReq())
-    return axios.get(APIList.GetSessionInfo(queryInfo.id),{})
+    return axios.get(APIList.GetSessionInfo(queryInfo.SessionID), {})
         .then((res: any) => {
             dispatch(ActGetSessionInfoSuc(res.data))
             if(onSuccess!==undefined)
@@ -53,6 +56,26 @@ export const ThunkDeleteItemByID = (queryInfo:IDeleteItemQuery,onSuccess?:()=>an
 const ActDeleteItemByIDReq=()=>({type:ActionsEnum.DeleteItemByID_Req})
 const ActDeleteItemByIDSuc=(data:any)=>({type:ActionsEnum.DeleteItemByID_Suc,data})
 const ActDeleteItemByIDFai=(err:any)=>({type:ActionsEnum.DeleteItemByID_Fai,err})
+
+export const ThunkDealSession = (queryInfo: any, onSuccess?: () => any, onFail?: () => any) => (dispatch: any) => {
+    console.log(queryInfo)
+    dispatch(ActDealSessionReq())
+    return axios.post(APIList.SessionDeal(queryInfo.SessionID), {})
+        .then((res: any) => {
+            dispatch(ActDealSessionSuc(res.data))
+            if (onSuccess !== undefined)
+                onSuccess();
+        })
+        .catch((err: any) => {
+            dispatch(ActDealSessionFai(err))
+            if (onFail !== undefined)
+                onFail();
+        })
+}
+const ActDealSessionReq = () => ({type: ActionsEnum.DealSession_Req})
+const ActDealSessionSuc = (data: any) => ({type: ActionsEnum.DealSession_Suc, data})
+const ActDealSessionFai = (err: any) => ({type: ActionsEnum.DealSession_Fai, err})
+
 
 export type ActionType = ReturnType<typeof ActGetSessionInfoReq>&
     ReturnType <typeof ActGetSessionInfoSuc> &
