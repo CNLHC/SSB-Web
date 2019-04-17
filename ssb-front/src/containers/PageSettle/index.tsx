@@ -5,7 +5,7 @@ import CommodityList from "../../components/CommodityList";
 
 import SessionInfo from "../../components/SessionInfo";
 import {RouteComponentProps, withRouter} from "react-router";
-import {Collapse, PageHeader} from "antd";
+import {Collapse, Icon, PageHeader} from "antd";
 import './index.scss'
 
 
@@ -51,38 +51,47 @@ export class UnconnectedPageSettle extends React.Component<IPageProps, IPageStat
                     title="易迈无人商店"
                     subTitle="结算页面"
                 />
-                <Collapse defaultActiveKey={['sessionInfoContent', 'sessionItems']} className={'settle-page-collapse'}>
-                    <Panel key={'sessionInfoContent'} header={"订单信息"}>
-                        <SessionInfo data={this.props.sessionInfo}
-                                     onCompletePay={() => this.props.onDealSession(
-                                         {SessionID: this.getSessionID()},
-                                         () => this.props.onGetSessionInfo(
+                {this.props.sessionInfo == undefined ?
+                    <div className={"warning"}>
+                        <div className={"content"}>
+                            <Icon type="warning"/>
+                            <div className={"text"}>访问的页面不存在</div>
+                        </div>
+                    </div> :
+                    <Collapse defaultActiveKey={['sessionInfoContent', 'sessionItems']}
+                              className={'settle-page-collapse'}>
+                        <Panel key={'sessionInfoContent'} header={"订单信息"}>
+                            <SessionInfo data={this.props.sessionInfo}
+                                         onCompletePay={() => this.props.onDealSession(
                                              {SessionID: this.getSessionID()},
-                                             () => {
-                                                 window.setTimeout(() => this.setState({
-                                                     ...this.state,
-                                                     payCompleteAnimation: false
-                                                 }), 2000);
-                                                 this.setState({...this.state, payCompleteAnimation: true});
+                                             () => this.props.onGetSessionInfo(
+                                                 {SessionID: this.getSessionID()},
+                                                 () => {
+                                                     window.setTimeout(() => this.setState({
+                                                         ...this.state,
+                                                         payCompleteAnimation: false
+                                                     }), 2000);
+                                                     this.setState({...this.state, payCompleteAnimation: true});
 
-                                             }
-                                         )
-                                     )}
-                                     payCompleteAnimation={this.state.payCompleteAnimation}
-                        />
-                    </Panel>
-                    <Panel key={'sessionItems'} header={"商品详情"}>
-                        <CommodityList
-                            data={this.props.sessionInfo !== undefined ? this.props.sessionInfo.Items : undefined}
-                            onClickDelete={(itemID: number) => {
-                                this.props.onDeleteItem({
-                                    SessionID: this.getSessionID(),
-                                    DeletePayload: {ItemID: itemID}
-                                }, () => this.props.onGetSessionInfo({SessionID: this.getSessionID()}))
-                            }}
-                        />
-                    </Panel>
-                </Collapse>
+                                                 }
+                                             )
+                                         )}
+                                         payCompleteAnimation={this.state.payCompleteAnimation}
+                            />
+                        </Panel>
+                        <Panel key={'sessionItems'} header={"商品详情"}>
+                            <CommodityList
+                                data={this.props.sessionInfo !== undefined ? this.props.sessionInfo.Items : undefined}
+                                onClickDelete={(itemID: number) => {
+                                    this.props.onDeleteItem({
+                                        SessionID: this.getSessionID(),
+                                        DeletePayload: {ItemID: itemID}
+                                    }, () => this.props.onGetSessionInfo({SessionID: this.getSessionID()}))
+                                }}
+                            />
+                        </Panel>
+                    </Collapse>
+                }
             </div>
         )
     }
