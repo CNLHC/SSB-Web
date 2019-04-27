@@ -3,7 +3,8 @@
 #include "../ssb/SSBConfig.h"
 extern BC26 *gBC26Obj;
 extern QueueHandle_t QueueRFID ;
-void ThSSBDaemon(void * arg){
+static void ThSSBDaemon(void * arg);
+static void ThSSBDaemon(void * arg){
     uint32_t RFID=0;
     bool tSendDeferred=false;
     int innerFSM=0;

@@ -5,6 +5,7 @@
 #include "../ssb/SSBConfig.h"
 
 extern BC26 *gBC26Obj;
+extern int globalFSM ;
 static void  ThBC26SocketDaemon(void * args);
 static void  ThBC26SocketDaemon(void * args){
     int innerFSM = 0;
@@ -54,10 +55,13 @@ static void  ThBC26SocketDaemon(void * args){
                             else if (p[5]=='2'){ 
                                 innerFSM=7;
                                 gBC26Obj->mIsSocketConnect=true;
+                                if(globalFSM==0)globalFSM=1;
+                                
                             }
                             else if (p[5]=='3'){ //Need close and reopen
                                 innerFSM=5;
                                 gBC26Obj->mIsSocketConnect=false;
+                                globalFSM=0;
                             }
                             else{ //Unknown
                                 innerFSM=0;

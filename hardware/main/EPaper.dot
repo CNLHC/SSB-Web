@@ -1,0 +1,13 @@
+digraph G {
+    splines="FALSE";
+    a[label="EMART Start Up"]
+    b[label="ready"]
+    c[label="scanning"]
+
+    a->b[label="  network available && socket connected"]
+    b->c
+    c->b
+
+
+
+}

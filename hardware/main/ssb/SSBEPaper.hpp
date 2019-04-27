@@ -1,3 +1,10 @@
+#pragma once
+#include <U8g2_for_Adafruit_GFX.h>
+#include <GxEPD2_BW.h>
+#include <GxEPD2_3C.h>
+
+extern  GxEPD2_BW<GxEPD2_213, MAX_HEIGHT(GxEPD2_213)> display;
+extern  U8G2_FOR_ADAFRUIT_GFX u8g2Fonts;
 const char E_START[] = "Emart Start-up...";
 const char E_READY[] = "Ready";
 const char E_SHOPPING[] = "Start Shopping!";
@@ -5,8 +12,20 @@ const char E_SCAN[] = "Scanning...";
 const char E_ADD[] = "Item Added";
 const char E_END[] = "Shopping Ends";
 
-void EPaperStart()
-{
+void EPaperStart();
+void EndCallback(const void *);
+void EPaperEnd();
+void StartCallback(const void *);
+void EPaperReady();
+void ReadyCallback(const void *);
+void EPaperShopping();
+void EPaperScan();
+void ShoppingCallback(const void *);
+void ScanCallback(const void *);
+void EPaperAdd();
+void AddCallback(const void *);
+
+void EPaperStart(){
   uint16_t bg = GxEPD_WHITE;
   uint16_t fg = GxEPD_BLACK;
   display.setRotation(1);
@@ -18,8 +37,7 @@ void EPaperStart()
   display.setFullWindow();
   display.drawPaged(StartCallback, 0);
 }
-void StartCallback(const void *)
-{
+void StartCallback(const void *) {
   uint16_t tbw;
   tbw = u8g2Fonts.getUTF8Width(E_START);
   // display.getTextBounds(E_START, 0, 0, &tbx, &tby, &tbw, &tbh);
@@ -29,8 +47,7 @@ void StartCallback(const void *)
   u8g2Fonts.setCursor(x, y); // start writing at this position
   u8g2Fonts.println(E_START);
 }
-void EPaperReady()
-{
+void EPaperReady() {
   uint16_t bg = GxEPD_WHITE;
   uint16_t fg = GxEPD_BLACK;
   display.setRotation(1);
@@ -43,8 +60,7 @@ void EPaperReady()
   display.setPartialWindow(0, 0, display.width(), display.height());
   display.drawPaged(ReadyCallback, 0);
 }
-void ReadyCallback(const void *)
-{
+void ReadyCallback(const void *) {
   uint16_t tbw;
   tbw = u8g2Fonts.getUTF8Width(E_READY);
   // display.getTextBounds(E_START, 0, 0, &tbx, &tby, &tbw, &tbh);
@@ -54,8 +70,7 @@ void ReadyCallback(const void *)
   u8g2Fonts.setCursor(x, y); // start writing at this position
   u8g2Fonts.println(E_READY);
 }
-void EPaperShopping()
-{
+void EPaperShopping() {
   uint16_t bg = GxEPD_WHITE;
   uint16_t fg = GxEPD_BLACK;
   display.setRotation(1);
@@ -68,8 +83,7 @@ void EPaperShopping()
   display.setPartialWindow(0, 0, display.width(), display.height());
   display.drawPaged(ShoppingCallback, 0);
 }
-void ShoppingCallback(const void *)
-{
+void ShoppingCallback(const void *) {
   uint16_t tbw;
   tbw = u8g2Fonts.getUTF8Width(E_SHOPPING);
   // display.getTextBounds(E_START, 0, 0, &tbx, &tby, &tbw, &tbh);
@@ -79,8 +93,7 @@ void ShoppingCallback(const void *)
   u8g2Fonts.setCursor(x, y); // start writing at this position
   u8g2Fonts.println(E_SHOPPING);
 }
-void EPaperScan()
-{
+void EPaperScan() {
   uint16_t bg = GxEPD_WHITE;
   uint16_t fg = GxEPD_BLACK;
   display.setRotation(1);
@@ -92,8 +105,7 @@ void EPaperScan()
   display.setPartialWindow(0, 0, display.width(), display.height());
   display.drawPaged(ScanCallback, 0);
 }
-void ScanCallback(const void *)
-{
+void ScanCallback(const void *) {
   uint16_t tbw;
   tbw = u8g2Fonts.getUTF8Width(E_SCAN);
   // display.getTextBounds(E_START, 0, 0, &tbx, &tby, &tbw, &tbh);
@@ -103,8 +115,7 @@ void ScanCallback(const void *)
   u8g2Fonts.setCursor(x, y); // start writing at this position
   u8g2Fonts.println(E_SCAN);
 }
-void EPaperAdd()
-{
+void EPaperAdd() {
   uint16_t bg = GxEPD_WHITE;
   uint16_t fg = GxEPD_BLACK;
   display.setRotation(1);
@@ -116,8 +127,7 @@ void EPaperAdd()
   display.setPartialWindow(0, 0, display.width(), display.height());
   display.drawPaged(AddCallback, 0);
 }
-void AddCallback(const void *)
-{
+void AddCallback(const void *) {
   uint16_t tbw;
   tbw = u8g2Fonts.getUTF8Width(E_ADD);
   // display.getTextBounds(E_START, 0, 0, &tbx, &tby, &tbw, &tbh);
@@ -127,8 +137,7 @@ void AddCallback(const void *)
   u8g2Fonts.setCursor(x, y); // start writing at this position
   u8g2Fonts.println(E_ADD);
 }
-void EPaperEnd()
-{
+void EPaperEnd() {
   uint16_t bg = GxEPD_WHITE;
   uint16_t fg = GxEPD_BLACK;
   display.setRotation(1);
@@ -140,8 +149,7 @@ void EPaperEnd()
   display.setFullWindow();
   display.drawPaged(EndCallback, 0);
 }
-void EndCallback(const void *)
-{
+void EndCallback(const void *) {
   uint16_t tbw;
   tbw = u8g2Fonts.getUTF8Width(E_END);
   // display.getTextBounds(E_START, 0, 0, &tbx, &tby, &tbw, &tbh);
