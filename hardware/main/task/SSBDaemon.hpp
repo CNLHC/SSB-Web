@@ -1,5 +1,6 @@
 #pragma once
 #include "../ssb/SSBEncodeFrame.hpp"
+#include "../ssb/SSBConfig.h"
 extern BC26 *gBC26Obj;
 extern QueueHandle_t QueueRFID ;
 void ThSSBDaemon(void * arg){
@@ -16,7 +17,7 @@ void ThSSBDaemon(void * arg){
                 break;
             }
             case 1:{
-                xQueueReceive(QueueRFID,&RFID,3000);
+                xQueueReceive(QueueRFID,&RFID,SSB_QUEUE_WAITING_TIME );
                 Serial1.println("Get Queue Item");
                 Serial1.println(String(RFID,HEX));
                 if(RFID!=0){

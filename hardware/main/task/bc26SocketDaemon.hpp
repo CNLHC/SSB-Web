@@ -1,8 +1,8 @@
-
 #pragma once
 #include <MapleFreeRTOS900.h>
 #include <stdlib.h>
 #include "../bc26util.hpp"
+#include "../ssb/SSBConfig.h"
 
 extern BC26 *gBC26Obj;
 static void  ThBC26SocketDaemon(void * args);
@@ -46,20 +46,20 @@ static void  ThBC26SocketDaemon(void * args){
                         if(p==NULL)
                             innerFSM=3;
                         else{
-                            if(p[5]=='1'){
+                            if(p[5]=='1'){//connecting
                                 innerFSM=0;
-                                vTaskDelay(500);
+                                vTaskDelay(SSB_BC26_SOCKET_CONNECTING_POLLING_INTERVAL);
                                 gBC26Obj->mIsSocketConnect=false;
                             }
-                            else if (p[5]=='2'){
+                            else if (p[5]=='2'){ 
                                 innerFSM=7;
                                 gBC26Obj->mIsSocketConnect=true;
                             }
-                            else if (p[5]=='3'){
+                            else if (p[5]=='3'){ //Need close and reopen
                                 innerFSM=5;
                                 gBC26Obj->mIsSocketConnect=false;
                             }
-                            else{
+                            else{ //Unknown
                                 innerFSM=0;
                                 gBC26Obj->mIsSocketConnect=false;
                             }
@@ -80,16 +80,12 @@ static void  ThBC26SocketDaemon(void * args){
                 if(gBC26Obj->mIsResponseSet){
                     Serial1.println("Scoket Daemon 4");
                     Serial1.println(gBC26Obj->mMessage);
-                    if(strstr(gBC26Obj->mMessage,"QIOPEN")!=NULL){
+                    if(strstr(gBC26Obj->mMessage,"QIOPEN")!=NULL 
+                        ||strstr(gBC26Obj->mMessage,"ERROR")!=NULL){
                         gBC26Obj->releaseLock();
                         innerFSM = 0;
                     }
-                    else if(strstr(gBC26Obj->mMessage,"ERROR")!=NULL){
-                        gBC26Obj->releaseLock();
-                        innerFSM = 0;
-
-                    }
-                    vTaskDelay(1000);
+                    vTaskDelay(SSB_BC26_SOCKET_QIOPEN_POLLING_INTERVAL);
                 }
                 break;
             }
@@ -122,11 +118,11 @@ static void  ThBC26SocketDaemon(void * args){
                 if(gBC26Obj->mIsResponseSet){
                     gBC26Obj->releaseLock();
                     innerFSM=0;
-                    vTaskDelay(15000);
+                    vTaskDelay(SSB_BC26_SOCKET_RECHECK_CONNECTIVITY_INTERVAL);
                 }
                 break;
             }
         }
-        vTaskDelay(50);
+        vTaskDelay(SSB_BC26_SOCKET_FSM_REFRESH_INTERVAL);
     }
 }

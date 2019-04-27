@@ -2,8 +2,8 @@
 #pragma once
 #include <MapleFreeRTOS900.h>
 
-SemaphoreHandle_t blinkLEDSem;
 const uint8_t statusLED = LED_BUILTIN;
+extern SemaphoreHandle_t blinkLEDSem;
 
 static void ThLEDSemReceiver(void* arg);
 static void ThLEDSemGiver(void* arg);

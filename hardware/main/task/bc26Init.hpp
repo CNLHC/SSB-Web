@@ -3,20 +3,22 @@
 #include "./bc26Reader.hpp"
 #include "./bc26NetworkDaemon.hpp"
 #include "./bc26SocketDaemon.hpp"
+#include "./bc26SocketReader.hpp"
 #include "./bc26HeartBeat.hpp"
 
 extern BC26 *gBC26Obj;
 
 static void ThBC26Init(void *arg){
-    portBASE_TYPE  hSerialReader,hNetworkDaemon,hSocketDaemon,hHeartBeat;
+    // if(hHeartBeat ==pdPASS)
+    //     Serial1.println("ThBC26HeartBeat Created");
+
+    gBC26Obj->mIsNetworkAvailable=true;
+
     int innerFSM=0;
-    hSerialReader = xTaskCreate(ThBC26Reader, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-    hNetworkDaemon = xTaskCreate( ThBC26NetworkDaemon, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-    hSocketDaemon= xTaskCreate(ThBC26SocketDaemon, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-    hHeartBeat =  xTaskCreate(ThBC26HeartBeat, NULL, configMINIMAL_STACK_SIZE, NULL, 2, NULL);
+
 
     while(1){
-        switch(innerFSM){
+    switch(innerFSM){
             case 0:{
                 if(!gBC26Obj->isBusy()){
                     Serial1.println("BC26 Init process");
@@ -37,6 +39,6 @@ static void ThBC26Init(void *arg){
                 break;
             }
         }
-        vTaskDelay(5);
+        vTaskDelay(100);
     }
 }

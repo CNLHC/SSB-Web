@@ -2,6 +2,7 @@
 #include <MapleFreeRTOS900.h>
 #include <stdlib.h>
 #include "../bc26util.hpp"
+#include "../ssb/SSBConfig.h"
 
 extern BC26 *gBC26Obj ;
 
@@ -28,16 +29,21 @@ static void ThBC26NetworkDaemon(void *arg){
                 break;
             }
             case 2:{
-                if(responseBuf[8]=='1')
+                if(responseBuf[8]=='1'){
+                    Serial1.println("Network available");
                     gBC26Obj->mIsNetworkAvailable=true;
-                else
+                    vTaskDelay(SSB_BC26_NETWORK_CHECK_INTERVAL_WHEN_CONNECT);  //check every 5s
+                }
+                else{
+                    Serial1.println("Network unavailable");
                     gBC26Obj->mIsNetworkAvailable=false;
+                    vTaskDelay(SSB_BC26_NETWORK_CHECK_INTERVAL_WHEN_DISCONNECT );  //check every 5s
+                }
 
-                vTaskDelay(15000);  //check every 5s
                 innerFSM=0;
             }
         };
-        vTaskDelay(5);
+        vTaskDelay(SSB_BC26_NETWORK_FSM_REFRESH_INTERVAL);
     }
         
 }
