@@ -5,7 +5,8 @@ export const BASE_URL=process.env.node_env=='production'?"http://ssb.cnworkshop.
 
 const APIList={
     GetSessionInfo:(id:number)=>`${BASE_URL}/api/session/${id}/`,
-    DeleteItemByID:(SessionID:number)=>`${BASE_URL}/api/session/${SessionID}/removeByID/`
+    DeleteItemByID: (SessionID: number) => `${BASE_URL}/api/session/${SessionID}/removeByID/`,
+    SessionDeal: (SessionID: number) => `${BASE_URL}/api/session/${SessionID}/deal/`
 }
 
 export default APIList
