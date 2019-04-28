@@ -11,6 +11,7 @@ console.log(Lottie)
 export interface ISessionInfoProps {
     data?: ISessionInfo
     onCompletePay?: () => void
+    onCloseSession:()=>void
     payCompleteAnimation?: boolean
 }
 
@@ -67,8 +68,12 @@ export class SessionInfo extends React.Component<ISessionInfoProps, ISessionInfo
                     元
                 </div>
                 <div className={"action-bar"}>
-                    <Button htmlType={'button'} icon={"pay-circle"} block
-                            onClick={() => this.setState({...this.state, payModalOpen: true})}>立即付款</Button>
+                    {data!==undefined&&data.State==="PAYING"?
+                        <Button htmlType={'button'} icon={"pay-circle"} block
+                                onClick={()=>this.props.onCloseSession()}>关闭订单</Button>:
+                        <Button htmlType={'button'} icon={"pay-circle"} block
+                                onClick={() => this.setState({...this.state, payModalOpen: true})}>立即付款</Button>
+                    }
                 </div>
                 <Modal
                     title="付款"

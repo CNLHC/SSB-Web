@@ -9,30 +9,31 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 class SessionViewset(viewsets.ModelViewSet):
     serializer_class = SessionSerializer
-    queryset = ShoppingSession.objects.all()
+    queryset = ShoppingSession.SSB.all()
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('State','ShoppingCart')
 
 
     def retrieve(self, request, *args, **kwargs):
         print(args,kwargs)
-        SessionObj = get_object_or_404(ShoppingSession,pk=kwargs.get('pk'))  #type: ShoppingSession
+        SessionObj = ShoppingSession.SSB.getActive(pk)
         return Response(data  = SessionSerializer(SessionObj).data)
 
     def create(self, request, *args, **kwargs):
         data = request.data
         print(data,args,kwargs)
-        if ShoppingSession.objects.filter(ShoppingCart__id=data.get('ShoppingCart')).filter(State__exact=ShoppingSession.SESSION_SHOPPING).count()>0:
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-        return super(SessionViewset,self).create( request, *args, **kwargs)
-
+        try:
+            ShoppingSession.SSB.getActive(data['ShoppingCart'])
+        except ShoppingSession.DoesNotExist:
+                return super(SessionViewset,self).create( request, *args, **kwargs)
+        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
     @action(methods=['post'],detail=True)
     def add(self,request,pk):
         data = request.data.dict() #type:dict
-        SessionObj = get_object_or_404(ShoppingSession,pk=pk)  #type: ShoppingSession
+        # SessionObj = get_object_or_404(ShoppingSession,pk=pk)  #type: ShoppingSession
+        SessionObj = ShoppingSession.SSB.getActive(pk)
         Tag = get_object_or_404(RFIDTag,RFID=data.get('RFID'))
-
         try:
             sessionItem = SessionObj.Items.get(Item__id=Tag.CommodityItem.id)
         except SessionItems.DoesNotExist:
@@ -45,7 +46,8 @@ class SessionViewset(viewsets.ModelViewSet):
     @action(methods=['post'],detail=True)
     def remove(self,request,pk):
         data = request.data.dict() #type:dict
-        SessionObj = get_object_or_404(ShoppingSession,pk=pk)  #type: ShoppingSession
+        SessionObj = ShoppingSession.SSB.getActive(pk)
+        # SessionObj = get_object_or_404(ShoppingSession,pk=pk)  #type: ShoppingSession
         Tag = get_object_or_404(RFIDTag,RFID=data.get('RFID'))
         try:
             sessionItem = SessionObj.Items.get(Item__id=Tag.CommodityItem.id)
@@ -65,7 +67,8 @@ class SessionViewset(viewsets.ModelViewSet):
             data = request.data.dict() #type:dict
         except AttributeError:
             data = request.data
-        SessionObj = get_object_or_404(ShoppingSession,pk=pk)  #type: ShoppingSession
+        SessionObj = ShoppingSession.SSB.getActive(pk)
+        # SessionObj = get_object_or_404(ShoppingSession,pk=pk)  #type: ShoppingSession
         ItemID=data.get('ItemID')
         try:
             sessionItem = SessionObj.Items.all().get(Item=ItemID)
@@ -77,7 +80,8 @@ class SessionViewset(viewsets.ModelViewSet):
 
     @action(methods=['post'],detail=True)
     def deal(self,request,pk):
-        SessionObj = get_object_or_404(ShoppingSession,pk=pk)  #type: ShoppingSession
+        SessionObj = ShoppingSession.SSB.getActive(pk)
+        # SessionObj = get_object_or_404(ShoppingSession,pk=pk)  #type: ShoppingSession
         SessionObj.State=SessionObj.SESSION_PAYING
         SessionObj.save()
         return Response(status=status.HTTP_200_OK)
@@ -85,7 +89,8 @@ class SessionViewset(viewsets.ModelViewSet):
 
     @action(methods=['post'],detail=True)
     def pay(self,request,pk):
-        SessionObj = get_object_or_404(ShoppingSession,pk=pk)  #type: ShoppingSession
+        SessionObj = ShoppingSession.SSB.getActive(pk)
+        # SessionObj = get_object_or_404(ShoppingSession,pk=pk)  #type: ShoppingSession
         SessionObj.State=SessionObj.SESSION_CLOSE
         SessionObj.save()
         return Response(status=status.HTTP_200_OK)

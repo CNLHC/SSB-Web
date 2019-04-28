@@ -11,6 +11,9 @@ export enum ActionsEnum {
     DealSession_Req = "[Settle]DealSession_Req",
     DealSession_Suc = "[Settle]DealSession_Suc",
     DealSession_Fai = "[Settle]DealSession_Fai",
+    CloseSession_Req = "[Settle]CloseSession_Req",
+    CloseSession_Suc = "[Settle]CloseSession_Suc",
+    CloseSession_Fai = "[Settle]CloseSession_Fai",
 }
 
 export const ThunkGetSessionInfo = (queryInfo:any,onSuccess?:()=>any,onFail?:()=>any) => (dispatch: any) => {
@@ -75,6 +78,26 @@ export const ThunkDealSession = (queryInfo: any, onSuccess?: () => any, onFail?:
 const ActDealSessionReq = () => ({type: ActionsEnum.DealSession_Req})
 const ActDealSessionSuc = (data: any) => ({type: ActionsEnum.DealSession_Suc, data})
 const ActDealSessionFai = (err: any) => ({type: ActionsEnum.DealSession_Fai, err})
+
+
+export const ThunkCloseSession = (queryInfo:any,onSuccess?:()=>any,onFail?:()=>any) => (dispatch: any) => {
+    dispatch(ActCloseSessionReq())
+    return axios.post(APIList.SessionClose(queryInfo.SessionID),{})
+        .then((res: any) => {
+            dispatch(ActCloseSessionSuc(res.data))
+            if(onSuccess!==undefined)
+                onSuccess();
+            })
+        .catch((err: any) => {
+            dispatch(ActCloseSessionFai(err))
+            if(onFail!==undefined)
+                onFail();
+            })
+}
+
+const ActCloseSessionReq=()=>({type:ActionsEnum.CloseSession_Req})
+const ActCloseSessionSuc=(data:any)=>({type:ActionsEnum.CloseSession_Suc,data})
+const ActCloseSessionFai=(err:any)=>({type:ActionsEnum.CloseSession_Fai,err})
 
 
 export type ActionType = ReturnType<typeof ActGetSessionInfoReq>&

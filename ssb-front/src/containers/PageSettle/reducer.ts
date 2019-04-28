@@ -8,13 +8,15 @@ export interface IPageSettleReducer {
     loadingDeleteItem:boolean
     loadingDealSession: boolean
     sessionInfo?:ISessionInfo
+    loadingCloseSession:boolean
 }
 
 
 const InitState: IPageSettleReducer = {
     loadingSessionInfo:false,
     loadingDeleteItem: false,
-    loadingDealSession: false
+    loadingDealSession: false,
+    loadingCloseSession:false
 };
 
 
@@ -47,6 +49,15 @@ const PageSettleReducers=(state: IPageSettleReducer = InitState, action: ActionT
             return
         case ActionsEnum.DealSession_Fai:
             draft.loadingDealSession = false;
+            return
+        case ActionsEnum.CloseSession_Req:
+            draft.loadingCloseSession = true;
+            return
+        case ActionsEnum.CloseSession_Suc:
+            draft.loadingCloseSession = false;
+            return
+        case ActionsEnum.CloseSession_Fai:
+            draft.loadingCloseSession = false;
             return
     }
 })

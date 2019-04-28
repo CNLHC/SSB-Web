@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
 
+
 # Create your models here.
 
 class ShoppingCart(models.Model):
@@ -20,6 +21,16 @@ class SessionItems(models.Model):
         verbose_name="订单商品"
         verbose_name_plural="订单商品信息"
 
+class SessionManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset()
+    
+    def getActive(self,CartID):
+        return self.get_queryset().get(State=ShoppingSession.SESSION_SHOPPING)
+
+
+
+
 class ShoppingSession(models.Model):
     SESSION_SHOPPING="SHOPPING"
     SESSION_PAYING="PAYING"
@@ -33,6 +44,11 @@ class ShoppingSession(models.Model):
     State = models.CharField(max_length=20,choices=SESSION_STATE,default=SESSION_SHOPPING,verbose_name="购物状态")
     StartTime = models.DateTimeField(auto_created=True,default=now,verbose_name="订单创建时间")
     EndTime = models.DateTimeField(null=True,default=None,verbose_name="订单关闭时间")
+    
+    SSB=SessionManager()
+
+    objects=models.Manager()
+    
     class Meta:
         verbose_name="订单信息"
         verbose_name_plural="订单信息"

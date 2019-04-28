@@ -1,6 +1,12 @@
 import * as React from 'react';
 import {connect} from "react-redux"
-import {IDeleteItemQuery, ThunkDealSession, ThunkDeleteItemByID, ThunkGetSessionInfo} from "./actions";
+import {
+    IDeleteItemQuery,
+    ThunkCloseSession,
+    ThunkDealSession,
+    ThunkDeleteItemByID,
+    ThunkGetSessionInfo
+} from "./actions";
 import CommodityList from "../../components/CommodityList";
 
 import SessionInfo from "../../components/SessionInfo";
@@ -55,7 +61,7 @@ export class UnconnectedPageSettle extends React.Component<IPageProps, IPageStat
                     <div className={"warning"}>
                         <div className={"content"}>
                             <Icon type="warning"/>
-                            <div className={"text"}>访问的页面不存在</div>
+                            <div className={"text"}>当前未在购物</div>
                         </div>
                     </div> :
                     <Collapse defaultActiveKey={['sessionInfoContent', 'sessionItems']}
@@ -72,10 +78,13 @@ export class UnconnectedPageSettle extends React.Component<IPageProps, IPageStat
                                                          payCompleteAnimation: false
                                                      }), 2000);
                                                      this.setState({...this.state, payCompleteAnimation: true});
-
                                                  }
                                              )
                                          )}
+                                         onCloseSession={()=>{
+                                             const payload = {SessionID: this.getSessionID()}
+                                             this.props.onCloseSession(payload,()=>this.props.onGetSessionInfo(payload))
+                                         }}
                                          payCompleteAnimation={this.state.payCompleteAnimation}
                             />
                         </Panel>
@@ -106,6 +115,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     onGetSessionInfo: (payload: any, onSuc?: () => any, onFai?: () => any) => dispatch(ThunkGetSessionInfo(payload, onSuc, onFai)),
     onDeleteItem: (payload: IDeleteItemQuery, onSuc?: () => any, onFai?: () => any) => dispatch(ThunkDeleteItemByID(payload, onSuc, onFai)),
     onDealSession: (payload: any, onSuc?: () => any, onFai?: () => any) => dispatch(ThunkDealSession(payload, onSuc, onFai))
+    onCloseSession: (payload: any, onSuc?: () => any, onFai?: () => any) => dispatch(ThunkCloseSession(payload, onSuc, onFai))
 });
 
 const PageSettle = withRouter(connect(mapStateToProps, mapDispatchToProps)(UnconnectedPageSettle));
