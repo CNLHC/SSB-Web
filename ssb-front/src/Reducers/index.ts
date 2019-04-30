@@ -1,11 +1,13 @@
 
 
 import { combineReducers } from 'redux';
-import { connectRouter } from 'connected-react-router'
 import PageSettleReducers from "../containers/PageSettle/reducer";
+import AndroidReducers from "../Android/reducers";
+import {IRootStore} from "../Typings/TypeRoot";
 
-const RootReducers =combineReducers({
+const RootReducers=combineReducers({
     settle: PageSettleReducers,
-});
+    Android: AndroidReducers
+} as any);
 
 export default RootReducers ;

@@ -9,6 +9,7 @@ export interface IPageSettleReducer {
     loadingDealSession: boolean
     sessionInfo?:ISessionInfo
     loadingCloseSession:boolean
+    loadingCreateSession:boolean
 }
 
 
@@ -16,7 +17,8 @@ const InitState: IPageSettleReducer = {
     loadingSessionInfo:false,
     loadingDeleteItem: false,
     loadingDealSession: false,
-    loadingCloseSession:false
+    loadingCloseSession:false,
+    loadingCreateSession:false
 };
 
 
@@ -26,6 +28,7 @@ const PageSettleReducers=(state: IPageSettleReducer = InitState, action: ActionT
             draft.loadingSessionInfo = true;
             return
         case ActionsEnum.GetSessionInfo_Fai:
+            draft.sessionInfo=undefined
             draft.loadingSessionInfo = false;
             return
         case ActionsEnum.GetSessionInfo_Suc:
@@ -58,6 +61,15 @@ const PageSettleReducers=(state: IPageSettleReducer = InitState, action: ActionT
             return
         case ActionsEnum.CloseSession_Fai:
             draft.loadingCloseSession = false;
+            return
+        case ActionsEnum.CreateSession_Req:
+            draft.loadingCreateSession = true;
+            return
+        case ActionsEnum.CreateSession_Suc:
+            draft.loadingCreateSession = false;
+            return
+        case ActionsEnum.CreateSession_Fai:
+            draft.loadingCreateSession = false;
             return
     }
 })

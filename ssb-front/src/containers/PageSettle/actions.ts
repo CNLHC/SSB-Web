@@ -14,6 +14,13 @@ export enum ActionsEnum {
     CloseSession_Req = "[Settle]CloseSession_Req",
     CloseSession_Suc = "[Settle]CloseSession_Suc",
     CloseSession_Fai = "[Settle]CloseSession_Fai",
+    CreateSession_Req = "[Settle]CreateSession_Req",
+    CreateSession_Suc = "[Settle]CreateSession_Suc",
+    CreateSession_Fai = "[Settle]CreateSession_Fai",
+    AddItemByBarCode_Req="[Settle]AddItemByBarCode_Req",
+    AddItemByBarCode_Suc="[Settle]AddItemByBarCode_Suc",
+    AddItemByBarCode_Fai="[Settle]AddItemByBarCode_Fai",
+
 }
 
 export const ThunkGetSessionInfo = (queryInfo:any,onSuccess?:()=>any,onFail?:()=>any) => (dispatch: any) => {
@@ -99,6 +106,44 @@ const ActCloseSessionReq=()=>({type:ActionsEnum.CloseSession_Req})
 const ActCloseSessionSuc=(data:any)=>({type:ActionsEnum.CloseSession_Suc,data})
 const ActCloseSessionFai=(err:any)=>({type:ActionsEnum.CloseSession_Fai,err})
 
+
+export const ThunkCreateSession = (queryInfo:any,onSuccess?:()=>any,onFail?:()=>any) => (dispatch: any) => {
+    dispatch(ActCreateSessionReq())
+    return axios.post(APIList.SessionCreate,queryInfo,{})
+        .then((res: any) => {
+            dispatch(ActCreateSessionSuc(res.data))
+            if(onSuccess!==undefined)
+                onSuccess();
+            })
+        .catch((err: any) => {
+            dispatch(ActCreateSessionFai(err))
+            if(onFail!==undefined)
+                onFail();
+            })
+}
+const ActCreateSessionReq=()=>({type:ActionsEnum.CreateSession_Req})
+const ActCreateSessionSuc=(data:any)=>({type:ActionsEnum.CreateSession_Suc,data})
+const ActCreateSessionFai=(err:any)=>({type:ActionsEnum.CreateSession_Fai,err})
+
+
+
+export const ThunkAddItemByBarCode = (queryInfo:any,onSuccess?:()=>any,onFail?:()=>any) => (dispatch: any) => {
+    dispatch(ActAddItemByBarCodeReq())
+    return axios.post(APIList.AddItemByBarCode(queryInfo.SessionID),queryInfo,{})
+        .then((res: any) => {
+            dispatch(ActAddItemByBarCodeSuc(res.data))
+            if(onSuccess!==undefined)
+                onSuccess();
+            })
+        .catch((err: any) => {
+            dispatch(ActAddItemByBarCodeFai(err))
+            if(onFail!==undefined)
+                onFail();
+            })
+}
+const ActAddItemByBarCodeReq=()=>({type:ActionsEnum.AddItemByBarCode_Req})
+const ActAddItemByBarCodeSuc=(data:any)=>({type:ActionsEnum.AddItemByBarCode_Suc,data})
+const ActAddItemByBarCodeFai=(err:any)=>({type:ActionsEnum.AddItemByBarCode_Fai,err})
 
 export type ActionType = ReturnType<typeof ActGetSessionInfoReq>&
     ReturnType <typeof ActGetSessionInfoSuc> &
