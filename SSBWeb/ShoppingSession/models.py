@@ -26,7 +26,7 @@ class SessionManager(models.Manager):
         return super().get_queryset()
     
     def getActive(self,CartID):
-        return self.get_queryset().get(State=ShoppingSession.SESSION_SHOPPING)
+        return self.get_queryset().exclude(State=ShoppingSession.SESSION_CLOSE).get()
 
 
 

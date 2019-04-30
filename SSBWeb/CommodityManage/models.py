@@ -15,7 +15,7 @@ class RFIDTag(models.Model):
 class Commodity(models.Model):
     Name = models.CharField(max_length=100,verbose_name="商品名称")
     Price = models.FloatField(default=0.0,verbose_name="商品价格")
-    Thumbnail =  models.FileField('media/')
+    Thumbnail =  models.FileField('media/',blank=True)
 
     def __str__(self):
         return "({id}){Name}".format(id=self.id,Name=self.Name)
