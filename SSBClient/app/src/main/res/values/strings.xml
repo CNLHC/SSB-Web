@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SSBClient</string>
+    <string name="scanCommodity">商品识别</string>
+</resources>
