@@ -29,3 +29,7 @@
 4. [tcpserver](./tcpserver)
 
 负责处理RFID识别终端中NBIOT模组与服务器的TCP自由通信，使用 `python` + `tornado` 实现。
+
+5. [UHDserver](.UHDserver)
+
+通过高频RFID识别实现防盗。硬件驱动通过 `cpp`语言编写，使用 `paho-mqtt-cpp`将读取到的高频标签推送到`mosquitto` mqtt broker中, 然后前端订阅相同`topic` 实现未付款商品的显示。
