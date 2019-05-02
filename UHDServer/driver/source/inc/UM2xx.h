@@ -8,6 +8,7 @@
 #include "UM2xxOpCode.h"
 #include "serial/serial.h"
 #include <vector>
+#include <unordered_map>
 
 /*!
  * \brief UM2xx 设备驱动
@@ -15,6 +16,7 @@
 namespace um2xx {
 typedef std::vector<uint8_t> UM2xxFrame;
 typedef std::vector<uint8_t> UM2xxData;
+typedef std::vector<uint8_t> UM2xxECR;
 
 
 
@@ -44,6 +46,12 @@ public:
 
   UM2xxData CMDSimpleGet(opcode code);
 
+  UM2xxData CMDFindTagSingle(uint16_t waitingTime);
+
+  std::unordered_map<std::string,int> CMDFindTags(uint16_t MaxTimes);
+
+  std::string DataToHexString(UM2xxData &data);
+
   void connect(const std::string &port);
 
 
@@ -69,6 +77,9 @@ private:
    * 校验码的获取方式是每帧数据所有字节（除去帧头和帧尾）异或.
    */
   uint8_t getFrameCRC(opcode code,uint8_t *data, uint16_t datasize);
+  UM2xxFrame readFrame(int timeOut);
+  UM2xxECR dataToECR( UM2xxData data);
+
 
 
 

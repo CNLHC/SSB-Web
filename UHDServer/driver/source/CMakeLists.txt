@@ -10,7 +10,7 @@ add_executable(UM2xxDriver
         src/UM2xx.cpp
         inc/UM2xx.h
         inc/UM2xxOpCode.h
-        )
+        src/UM2xxCMD.cpp)
 
 target_link_libraries(UM2xxDriver
         ${serial_LIBRARIES}

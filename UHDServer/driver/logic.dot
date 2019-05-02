@@ -1,0 +1,25 @@
+digraph G {
+
+    a[label="开始"]
+    b[label="阻塞的读取单个标签"]
+    c[label="向模块发送单次读取指令"]
+    d[label="创建线程和同步原语\n 使用带有超时特性的join等待\n 向模块发送连续读取指令"]
+    subgraph clusterThread1{
+        label="工作线程"
+        ta[label="开始多标签读取"]
+        tb[label="退出线程,返回数据"]
+    }
+    e[label="向模块发送终止读取指令"]
+
+    a->b
+    b->d[label = "阻塞释放"]
+    b->c[label="阻塞超时"]
+    c->b[headport=w tailport=w]
+    d->ta
+
+    d-> tb[label="原语超时，终止线程"]
+
+    ta->tb[label="两秒钟内无新标签"]
+    ta->ta[label="读取标签"]
+    tb->e
+}
