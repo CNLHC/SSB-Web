@@ -7,8 +7,8 @@
 
 #include "UM2xxOpCode.h"
 #include "serial/serial.h"
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 /*!
  * \brief UM2xx 设备驱动
@@ -17,17 +17,12 @@ namespace um2xx {
 typedef std::vector<uint8_t> UM2xxFrame;
 typedef std::vector<uint8_t> UM2xxData;
 typedef std::vector<uint8_t> UM2xxECR;
-
-
-
+typedef std::unordered_map<std::string, int> UM2xxTagSet;
 
 class UM2xx {
 
-
-
-
 public:
-   UM2xxData DataEmpty;
+  UM2xxData DataEmpty;
 
   /*!
    * \brief 编码一个UM2xx数据帧
@@ -48,17 +43,17 @@ public:
 
   UM2xxData CMDFindTagSingle(uint16_t waitingTime);
 
-  std::unordered_map<std::string,int> CMDFindTags(uint16_t MaxTimes);
+  UM2xxTagSet CMDFindTags(uint16_t MaxTimes);
 
   std::string DataToHexString(UM2xxData &data);
 
+  std::string TagSetToMqttPayload(UM2xxTagSet &data);
+
+
   void connect(const std::string &port);
 
-
-
-
 private:
-  serial::Serial * mSerial= nullptr;
+  serial::Serial *mSerial = nullptr;
   /*!
    * \brief 由数据长度换算得到帧长度
    * \param datasize 数据长度
@@ -76,17 +71,11 @@ private:
    *
    * 校验码的获取方式是每帧数据所有字节（除去帧头和帧尾）异或.
    */
-  uint8_t getFrameCRC(opcode code,uint8_t *data, uint16_t datasize);
+  uint8_t getFrameCRC(opcode code, uint8_t *data, uint16_t datasize);
   UM2xxFrame readFrame(int timeOut);
-  UM2xxECR dataToECR( UM2xxData data);
+  UM2xxECR dataToECR(UM2xxData data);
 
-
-
-
-
-
-  bool isConnected(){return mSerial!= nullptr;};
-
+  bool isConnected() { return mSerial != nullptr; };
 };
 
 } // namespace um2xx

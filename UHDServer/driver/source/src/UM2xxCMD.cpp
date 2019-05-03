@@ -25,7 +25,6 @@ UM2xxData UM2xx::CMDSimpleGet(um2xx::opcode code) {
   UM2xxFrame response = readFrame(100);
   return parseDataFromFrame(response);
 }
-
 UM2xxData UM2xx::CMDFindTagSingle(uint16_t timeout) {
   if (!isConnected()) {
     std::cerr << "Not Connected" << std::endl;
@@ -39,10 +38,8 @@ UM2xxData UM2xx::CMDFindTagSingle(uint16_t timeout) {
   UM2xxFrame response = readFrame(100);
   return parseDataFromFrame(response);
 }
-
-std::unordered_map<std::string, int> UM2xx::CMDFindTags(uint16_t MaxTimes) {
+UM2xxTagSet UM2xx::CMDFindTags(uint16_t MaxTimes) {
   std::unordered_map<std::string, int> TagDataList;
-
   if (!isConnected()) {
     std::cerr << "Not Connected" << std::endl;
     return TagDataList;
@@ -52,6 +49,7 @@ std::unordered_map<std::string, int> UM2xx::CMDFindTags(uint16_t MaxTimes) {
   auto frame = encodeFrame(OP_FIND_TAGS_MULTI, payload, 2);
 
   // start
+  // TODO: Hardware encoded  Timeout value
   mSerial->setTimeout(serial::Timeout::max(), 3000, 0, 250, 0);
   mSerial->write(frame);
 
@@ -79,12 +77,13 @@ std::unordered_map<std::string, int> UM2xx::CMDFindTags(uint16_t MaxTimes) {
     timeToQuit = true;
     return;
   };
-  std::thread workThreadHandle(ThreadWorker);
 
   // run and guard
+  std::thread workThreadHandle(ThreadWorker);
   while (!timeToQuit && Clock::now() < t1)
     ;
   timeToQuit = true;
+  // wait for  thread quit
   workThreadHandle.join();
 
   // stop
@@ -92,12 +91,10 @@ std::unordered_map<std::string, int> UM2xx::CMDFindTags(uint16_t MaxTimes) {
   mSerial->write(frame);
   return TagDataList;
 }
-
 UM2xxFrame UM2xx::readFrame(int timeOut) {
   auto s = mSerial->readline(65536, "\r\n");
   return UM2xxFrame(s.begin(), s.end());
 }
-
 UM2xxECR UM2xx::dataToECR(UM2xxData data) {
   if (data.size() > 8)
     return UM2xxECR(data.begin() + 2, data.end() - 3);

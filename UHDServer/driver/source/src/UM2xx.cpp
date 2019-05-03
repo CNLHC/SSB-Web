@@ -3,15 +3,12 @@
 //
 
 #include "../inc/UM2xx.h"
-#include <iostream>
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <string>
-
 using namespace um2xx;
-
 UM2xxFrame UM2xx::encodeFrame(um2xx::opcode code, uint8_t *data,
                               uint16_t datasize) {
 
@@ -21,17 +18,12 @@ UM2xxFrame UM2xx::encodeFrame(um2xx::opcode code, uint8_t *data,
   // Frame head
   out.push_back(0xA5);
   out.push_back(0x5A);
-
   uint16_t frameSize = getFrameSize(datasize);
-
   out.push_back((uint8_t)(frameSize >> 8));
   out.push_back((uint8_t)(frameSize));
-
   out.push_back(code);
-
   for (int i = 0; i < datasize; i++)
     out.push_back(data[i]);
-
   out.push_back(getFrameCRC(code, data, datasize));
   out.push_back(0x0D);
   out.push_back(0x0A);
@@ -74,9 +66,8 @@ void UM2xx::connect(const std::string &port) {
   }
 }
 bool UM2xx::isFrameAvailable(um2xx::UM2xxFrame &frame) {
-  if(frame.size()<5)
+  if (frame.size() < 5)
     return false;
-
   if (!(frame[0] == 0xa5 && frame[1] == 0x5a))
     return false;
   uint16_t frameSize = ((uint16_t)frame[2] << 8) + frame[3];
@@ -84,13 +75,13 @@ bool UM2xx::isFrameAvailable(um2xx::UM2xxFrame &frame) {
     return false;
   if (!(frame[frameSize - 2] == 0x0D && frame[frameSize - 1] == 0x0A))
     return false;
-
   return true;
 }
 UM2xxData UM2xx::parseDataFromFrame(um2xx::UM2xxFrame &frame) {
   if (!isFrameAvailable(frame)) {
-    std::cerr << "frame format error!:" ;
-    std::cerr<< DataToHexString(frame)<< std::endl;;
+    std::cerr << "frame format error!:";
+    std::cerr << DataToHexString(frame) << std::endl;
+    ;
     UM2xxData empty;
     return empty;
   }
@@ -98,12 +89,17 @@ UM2xxData UM2xx::parseDataFromFrame(um2xx::UM2xxFrame &frame) {
   UM2xxData data(frame.begin() + 5, frame.begin() + 5 + dataSize);
   return data;
 }
-
 std::string UM2xx::DataToHexString(um2xx::UM2xxData &data) {
   std::ostringstream ss;
-  ss << std::hex << std::uppercase << std::setfill( '0' );
-  std::for_each( data.cbegin(), data.cend(), [&]( int c ) { ss << std::setw( 2 ) << c; } );
+  ss << std::hex << std::uppercase << std::setfill('0');
+  std::for_each(data.cbegin(), data.cend(),
+                [&](int c) { ss << std::setw(2) << c; });
   return ss.str();
 }
 
-
+std::string UM2xx::TagSetToMqttPayload(um2xx::UM2xxTagSet &data) {
+  std::ostringstream ss;
+  for(auto & j:data)
+    ss<<j.first<<'='<<j.second<<',';
+  return ss.str();
+}
